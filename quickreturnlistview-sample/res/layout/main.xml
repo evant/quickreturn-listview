@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<me.tatarka.QuickReturnLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/quick_return_layout"
+        android:orientation="vertical"
+        app:list="@+id/list"
+        app:quickReturn="@+id/quick_return"
+        app:animate="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list"
+        android:entries="@array/sample_list"
+            />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/quick_return"
+        android:background="@color/holo_blue"
+        android:text="Footer"
+        android:clickable="true"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:layout_gravity="bottom"/>
+</me.tatarka.QuickReturnLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="QuickReturnLayout">
+        <attr name="list" format="reference"/>
+        <attr name="quickReturn" format="reference"/>
+        <attr name="animate" format="boolean"/>
+    </declare-styleable>
+</resources>

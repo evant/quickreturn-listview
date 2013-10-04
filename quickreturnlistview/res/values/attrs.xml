@@ -3,6 +3,6 @@
     <declare-styleable name="QuickReturnLayout">
         <attr name="list" format="reference"/>
         <attr name="quickReturn" format="reference"/>
-        <attr name="animate" format="boolean"/>
+        <attr name="animateOnStop" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -16,6 +16,7 @@ public class QuickReturnLayout extends FrameLayout {
     private int mListId;
     private int mQuickReturnId;
     private boolean mAnimate;
+    private boolean mLocked;
 
     private AbsListView mList;
     private View mQuickReturn;
@@ -43,7 +44,7 @@ public class QuickReturnLayout extends FrameLayout {
                 a.recycle();
             }
 
-            mAnimate = a.getBoolean(R.styleable.QuickReturnLayout_animate, false);
+            mAnimate = a.getBoolean(R.styleable.QuickReturnLayout_animateOnStop, false);
         }
     }
 
@@ -56,6 +57,11 @@ public class QuickReturnLayout extends FrameLayout {
         return mAnimate;
     }
 
+    public void setLocked(boolean value) {
+        mLocked = value;
+        if (mAnimator != null) mAnimator.setLocked(value);
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -66,6 +72,7 @@ public class QuickReturnLayout extends FrameLayout {
         if (mQuickReturn == null) throw new IllegalArgumentException("QuickReturnLayout must contain referenced quick return view.");
 
         mAnimator = new QuickReturnAnimator(mQuickReturn, mAnimate);
+        mAnimator.setLocked(mLocked);
         mList.setOnScrollListener(mAnimator);
     }
 }

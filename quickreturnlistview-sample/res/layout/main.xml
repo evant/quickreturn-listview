@@ -7,7 +7,7 @@
         android:orientation="vertical"
         app:list="@+id/list"
         app:quickReturn="@+id/quick_return"
-        app:animate="false"
+        app:animateOnStop="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

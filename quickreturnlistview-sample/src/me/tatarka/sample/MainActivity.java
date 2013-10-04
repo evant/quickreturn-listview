@@ -3,8 +3,8 @@ package me.tatarka.sample;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import me.tatarka.QuickReturnLayout;
 
@@ -21,14 +21,22 @@ public class MainActivity extends Activity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             getActionBar().setDisplayShowCustomEnabled(true);
-            getActionBar().setCustomView(R.layout.option_animate);
+            getActionBar().setCustomView(R.layout.options);
 
-            final CheckBox mCheckbox = (CheckBox) getActionBar().getCustomView().findViewById(R.id.animate);
+            final CheckBox mAnimate = (CheckBox) getActionBar().getCustomView().findViewById(R.id.animate);
+            final CheckBox mLock = (CheckBox) getActionBar().getCustomView().findViewById(R.id.lock);
 
-            mCheckbox.setOnClickListener(new View.OnClickListener() {
+            mAnimate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View view) {
-                    quickReturnLayout.setAnimate(mCheckbox.isChecked());
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    quickReturnLayout.setAnimate(checked);
+                }
+            });
+
+            mLock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    quickReturnLayout.setLocked(checked);
                 }
             });
         } else {

@@ -1,5 +1,6 @@
 package me.tatarka;
 
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -12,7 +13,6 @@ import android.widget.AbsListView;
  * and the given view will be shown or hidden as your scroll.
  */
 public class QuickReturnAnimator implements AbsListView.OnScrollListener {
-
     private AbsListView mListView;
     private View mQuickReturnView;
     private int mQuickReturnHeight = -1;
@@ -22,6 +22,9 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
     private int mLastViewPosition;
     private boolean mAnimate;
     private boolean mMovingUp;
+    private Runnable mDelayedAnimate;
+    private Handler mHandler;
+    private boolean mLocked;
 
     /**
      * Constructs a new quick return animator. The quickReturnView should be shown overlaying the
@@ -36,6 +39,13 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
     public QuickReturnAnimator(View quickReturnView, boolean animate) {
         mQuickReturnView = quickReturnView;
         mAnimate = animate;
+        mDelayedAnimate = new Runnable() {
+            @Override
+            public void run() {
+                if (mMovingUp) hide();
+                else show();
+            }
+        };
     }
 
     /**
@@ -82,6 +92,7 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
      * Animates the quickReturnView to the hidden state.
      */
     public void hide() {
+        if (mLocked) return;
         mQuickReturnView.animate()
                 .translationY(mQuickReturnHeight)
                 .setInterpolator(new AccelerateInterpolator())
@@ -92,33 +103,51 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
      * Animates the quickReturnView to the shown state.
      */
     public void show() {
+        if (mLocked) return;
         mQuickReturnView.animate()
                 .translationY(0)
                 .setInterpolator(new DecelerateInterpolator())
                 .start();
     }
 
+    /**
+     * Locks the quickReturnView so that it can no longer move. {@link QuickReturnAnimator#show()}
+     * and {@link QuickReturnAnimator#hide()} are also ignored.
+     */
+    public void setLocked(boolean value) {
+        mLocked = value;
+    }
+
+    /**
+     * Returns if the quickReturnView is locked so that it won't move.
+     *
+     * @return true if locked, false otherwise
+     */
+    public boolean getLocked() {
+        return mLocked;
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView listView, int scrollState) {
-        if (!mAnimate) return;
+        if (!mAnimate || mLocked) return;
 
+        // Delay animation so that if the list start scrolling again soon after, it won't animate
         if (scrollState == SCROLL_STATE_IDLE) {
-            if (mMovingUp) {
-                hide();
-            } else {
-                show();
-            }
+            mHandler.postDelayed(mDelayedAnimate, 300);
+        } else {
+            mHandler.removeCallbacks(mDelayedAnimate);
         }
     }
 
     @Override
     public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (totalItemCount == 0) return;
+        if (totalItemCount == 0 || mLocked) return;
 
         if (mListView != listView || mQuickReturnHeight <= 0) {
             mListView = listView;
             mLastOffset = 0;
             mQuickReturnHeight = mQuickReturnView.getHeight();
+            mHandler = mListView.getHandler();
         }
 
         if (mLastVisibleItem == null) {

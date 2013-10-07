@@ -25,6 +25,7 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
     private Runnable mDelayedAnimate;
     private Handler mHandler;
     private boolean mLocked;
+    private boolean mVisible;
 
     /**
      * Constructs a new quick return animator. The quickReturnView should be shown overlaying the
@@ -97,6 +98,7 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
                 .translationY(mQuickReturnHeight)
                 .setInterpolator(new AccelerateInterpolator())
                 .start();
+        mVisible = false;
     }
 
     /**
@@ -108,6 +110,7 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
                 .translationY(0)
                 .setInterpolator(new DecelerateInterpolator())
                 .start();
+        mVisible = true;
     }
 
     /**
@@ -125,6 +128,14 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
      */
     public boolean getLocked() {
         return mLocked;
+    }
+
+    /**
+     * Returns if the quickReturnView is at least partially shown.
+     * @return true if visible, false otherwise
+     */
+    public boolean isVisible() {
+        return mVisible;
     }
 
     @Override
@@ -167,6 +178,7 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
                 }
                 mQuickReturnView.setTranslationY(translationY);
                 mLastOffset = offset;
+                mVisible = (translationY != mQuickReturnHeight);
             } else {
                 mLastVisibleItem = null;
             }

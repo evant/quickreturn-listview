@@ -25,4 +25,11 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>wta.snapshots</id>
+            <url>${wta.repo.snapshot}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

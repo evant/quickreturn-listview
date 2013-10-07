@@ -52,4 +52,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>wta.snapshots</id>
+            <url>${wta.repo.snapshot}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

@@ -92,6 +92,7 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
     /**
      * Animates the quickReturnView to the hidden state.
      */
+
     public void hide() {
         if (mLocked) return;
         mQuickReturnView.animate()
@@ -141,6 +142,10 @@ public class QuickReturnAnimator implements AbsListView.OnScrollListener {
     @Override
     public void onScrollStateChanged(AbsListView listView, int scrollState) {
         if (!mAnimate || mLocked) return;
+
+        if (mHandler == null) {
+            mHandler = listView.getHandler();
+        }
 
         // Delay animation so that if the list start scrolling again soon after, it won't animate
         if (scrollState == SCROLL_STATE_IDLE) {
